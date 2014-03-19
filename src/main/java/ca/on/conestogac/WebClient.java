@@ -11,6 +11,16 @@ import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+ 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 
 public class WebClient {
 	
@@ -75,8 +85,45 @@ public class WebClient {
 	}
 
 	public void downloadString(String sUrl, PrintStream out) throws Exception {
-		// TODO Auto-generated method stub
-		throw new Exception("not implemented");
+		HttpGet getRequest = new HttpGet(
+				sUrl);
+
+		HttpResponse response = this.httpClient.execute(getRequest);
+		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+		XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(response.getEntity().getContent());
+		out.print("[{");
+		boolean bItems = false, bFields = false;
+		int event = xmlStreamReader.getEventType();
+		String sElementName = null;
+		while(xmlStreamReader.hasNext()){
+			switch(event){
+			case XMLStreamConstants.START_ELEMENT:
+				sElementName = xmlStreamReader.getLocalName();
+				if(sElementName.equals("item")){
+					if(bItems){
+						out.print("},{");
+					}else{
+						bItems = true;
+					}
+					bFields = false;
+				}
+				break;
+			case XMLStreamConstants.CHARACTERS:
+				if(bItems && bFields){
+					out.print(", ");
+				}else if(bItems){
+					bFields = true;
+				}
+				if(bItems){
+					out.print("\"" + sElementName + "\":\"" + xmlStreamReader.getText() + "\"");
+				}
+				break;
+			}
+			
+			event = xmlStreamReader.next();
+		}
+		
+		out.print("}]");
 	}
 
 	
