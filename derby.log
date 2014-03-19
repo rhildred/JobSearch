@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Tue Mar 18 16:19:07 EDT 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-0144-d6d8-f672-000005c70818 
-on database directory G:\workspace\JobSearch\MyDbTest with class loader sun.misc.Launcher$AppClassLoader@550a6723 
+Wed Mar 19 12:35:57 EDT 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-0144-db33-0380-000005ab96e8 
+on database directory E:\PhoneGapEvt\workspace\JobSearch\MyDbTest with class loader sun.misc.Launcher$AppClassLoader@550a6723 
 Loaded from file:/C:/Users/Administrator/.m2/repository/org/apache/derby/derby/10.10.1.1/derby-10.10.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.7.0_51-b13
-user.dir=G:\workspace\JobSearch
+user.dir=E:\PhoneGapEvt\workspace\JobSearch
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1
