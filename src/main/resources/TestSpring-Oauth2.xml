@@ -1,0 +1,13 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="oAuth2" class="ca.on.conestogac.Oauth2" scope="singleton">
+		<property name="sClientId" value="you would put your client id here" />
+		<property name="sSecretToken" value="you would put your token here" />
+		<!-- relative to the base, which is http://localhost:8080 or what is supplied to the constructor -->
+		<property name="sRedirect" value="/JobSearch/login" />
+	</bean>
+
+</beans>

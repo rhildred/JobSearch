@@ -13,41 +13,36 @@ import javax.servlet.http.*;
 
 public class Oauth2 {
 
-	private WebClient conn = null;
-	private String sKey = null, sSecretToken = null, sRedirect = null;
-	private HttpSession Session = null;
+	private String sClientId = null, sSecretToken = null, sRedirect = null;
 
-	public Oauth2(String sClientId, String sSecret, String sReturnUrl,
-			HttpSession sess) {
-		this.conn = new WebClient();
-		this.sKey = sClientId;
-		this.sSecretToken = sSecret;
+	public Oauth2(){
+	}
 
-		this.sRedirect = sReturnUrl;
+	public void redirect(HttpServletResponse res) throws IOException {
 		if (!this.sRedirect.contains("localhost")) {
 			String sPattern = ":\\d\\d*";
 			this.sRedirect = this.sRedirect.replaceAll(sPattern, "");
 		}
-		this.Session = sess;
-	}
-
-	public void redirect(HttpServletResponse res) throws IOException {
-		String sAuthUrl = "https://accounts.google.com/o/oauth2/auth?redirect_uri=%s&amp;client_id=%s&amp;scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&amp;response_type=code&amp;max_auth_age=0";
+		String sAuthUrl = "https://accounts.google.com/o/oauth2/auth?redirect_uri=%s&client_id=%s&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&max_auth_age=0";
 		String sRedirectToGoogle = String.format(sAuthUrl, this.sRedirect,
-				this.sKey);
+				this.sClientId);
 		res.sendRedirect(sRedirectToGoogle);
 
 	}
-	
+	private WebClient conn = null;
+	private String sGoogleId = null, sName = null, sEmail = null;
 	public void handleCode(String sCode) throws IOException, ParseException
     {
-        if (this.Session.getAttribute("sGoogleId") == null)
+		if(conn == null){
+			this.conn = new WebClient();			
+		}
+        if (this.sGoogleId == null)
         {
             //step 5
             // then google has redirected to us so build up query for 2nd phase of authentication
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
             nameValuePairs.add(new BasicNameValuePair("grant_type", "authorization_code"));
-            nameValuePairs.add(new BasicNameValuePair("client_id", this.sKey));
+            nameValuePairs.add(new BasicNameValuePair("client_id", this.sClientId));
             nameValuePairs.add(new BasicNameValuePair("client_secret", this.sSecretToken));
             nameValuePairs.add(new BasicNameValuePair("code", sCode));
             nameValuePairs.add(new BasicNameValuePair("redirect_uri", this.sRedirect));
@@ -57,33 +52,43 @@ public class Oauth2 {
 
             // step 7
             // now we can get the user info
-            String sUserInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&amp;access_token=%s";
+            String sUserInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=%s";
             JSONObject oInfo = (JSONObject) conn.downloadJson(String.format(sUserInfoUrl, sAccessToken));
-            this.Session.setAttribute("sName", (String)oInfo.get("name"));
-            this.Session.setAttribute("sGoogleId", (String)oInfo.get("id"));
-            this.Session.setAttribute("sEmail", (String)oInfo.get("email"));
+            sName = (String)oInfo.get("name");
+            sGoogleId = (String)oInfo.get("id");
+            sEmail = (String)oInfo.get("email");
   
         }
                   
     }
 	
-	public String getName()
-	{
-		return (String)this.Session.getAttribute("sName");
-	}
-	
-	public String getGoogleId()
-	{
-		return (String)this.Session.getAttribute("sGoogleId");
-	}
-	
-	public String getEmail()
-	{
-		return (String)this.Session.getAttribute("sEmail");
-	}
 
 	public void close() {
 		this.conn.dispose();
+	}
+
+	public String getsName() {
+		return sName;
+	}
+
+	public String getsEmail() {
+		return sEmail;
+	}
+
+	public void setsClientId(String sClientId) {
+		this.sClientId = sClientId;
+	}
+
+	public void setsSecretToken(String sSecretToken) {
+		this.sSecretToken = sSecretToken;
+	}
+
+	public void setsRedirect(String sRedirect) {
+		this.sRedirect = sRedirect;
+	}
+
+	public String getsRedirect() {
+		return sRedirect;
 	}
 
 }
