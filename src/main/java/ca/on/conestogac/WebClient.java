@@ -84,7 +84,7 @@ public class WebClient {
 		return this.handleJsonResponse(response);
 	}
 
-	public void downloadString(String sUrl, PrintStream out) throws Exception {
+	public void downloadXMLasJSON(String sUrl, PrintStream out) throws Exception {
 		HttpGet getRequest = new HttpGet(
 				sUrl);
 

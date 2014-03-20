@@ -23,7 +23,7 @@ public class TestWebClient {
 	{
 		try{
 			WebClient oWebClient = new WebClient();
-			oWebClient.downloadString(sUrl, System.out);
+			oWebClient.downloadXMLasJSON(sUrl, System.out);
 			assertTrue(true);
 		}catch(Exception e){
 			
