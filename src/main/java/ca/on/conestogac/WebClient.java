@@ -84,14 +84,14 @@ public class WebClient {
 		return this.handleJsonResponse(response);
 	}
 
-	public void downloadXMLasJSON(String sUrl, PrintStream out) throws Exception {
+	public void downloadXMLasJSON(String sUrl, Writer out) throws Exception {
 		HttpGet getRequest = new HttpGet(
 				sUrl);
 
 		HttpResponse response = this.httpClient.execute(getRequest);
 		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 		XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(response.getEntity().getContent());
-		out.print("[{");
+		out.write("[{");
 		boolean bItems = false, bFields = false;
 		int event = xmlStreamReader.getEventType();
 		String sElementName = null;
@@ -101,7 +101,7 @@ public class WebClient {
 				sElementName = xmlStreamReader.getLocalName();
 				if(sElementName.equals("item")){
 					if(bItems){
-						out.print("},{");
+						out.write("},{");
 					}else{
 						bItems = true;
 					}
@@ -110,12 +110,12 @@ public class WebClient {
 				break;
 			case XMLStreamConstants.CHARACTERS:
 				if(bItems && bFields){
-					out.print(", ");
+					out.write(", ");
 				}else if(bItems){
 					bFields = true;
 				}
 				if(bItems){
-					out.print("\"" + sElementName + "\":\"" + xmlStreamReader.getText() + "\"");
+					out.write("\"" + sElementName + "\":\"" + xmlStreamReader.getText() + "\"");
 				}
 				break;
 			}
@@ -123,7 +123,7 @@ public class WebClient {
 			event = xmlStreamReader.next();
 		}
 		
-		out.print("}]");
+		out.write("}]");
 	}
 
 	

@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html>
+<head>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+<style>
+th, td{
+	padding-right: 2em;
+}
+
+</style>
+</head>
 <body>
-This will be a Job Search App
+<div class="container">
+<form id="doSearch" class="pull-right"><input type="text" id="searchterm" placeholder="enter search term" /><input type="text" id="location" 
+placeholder="enter postal code"/><button type="submit">Search</button></form>
+<h1>Job Search App</h1>
+<table>
+<thead><tr><th>Title:</th><th>Author:</th><th>Pub Date:</th></tr></thead>
+<tbody id="tablebody">
+<script type="text/template" id="leadrow">
+<tr><td><%= title %></td><td><%= author %></td><td><%= pubDate %></td></tr>
+</script>
+</tbody>
+</table>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script src="js/jobSearch.js"></script>
 </body>
 </html>

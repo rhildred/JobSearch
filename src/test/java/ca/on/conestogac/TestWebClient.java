@@ -1,6 +1,9 @@
 package ca.on.conestogac;
 
 import static org.junit.Assert.assertTrue;
+
+import java.io.PrintWriter;
+
 import org.junit.Test;
 
 public class TestWebClient {
@@ -23,7 +26,7 @@ public class TestWebClient {
 	{
 		try{
 			WebClient oWebClient = new WebClient();
-			oWebClient.downloadXMLasJSON(sUrl, System.out);
+			oWebClient.downloadXMLasJSON(sUrl, new PrintWriter(System.out));
 			assertTrue(true);
 		}catch(Exception e){
 			
