@@ -8,7 +8,8 @@ var JobSearch = Backbone.Router.extend({
 		jQuery("#doSearch").submit(jQuery.proxy(this.doSearch, this));
 	},
 	doSearch: function(){
-		this.navigate("doSearch/" + jQuery("#searchterm").val() + "/" + jQuery("#location").val());
+		this.navigate("doSearch/" + jQuery("#searchterm").val() + "/" + jQuery("#location").val(),
+				{trigger: true});
 		return false;
 	},
 	fLeadRow: _.template(jQuery("#leadrow").html()),
